@@ -5,7 +5,10 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "publish-packages": "turbo run build lint test && changeset publish",
+    "changeset": "changeset",
+    "version-packages": "changeset version"
   },
   "dependencies": {
     "clsx": "^2.0.0",
@@ -35,5 +38,11 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gowtham2003/nila-ui.git"
+  },
+  "author": "Gowtham Gobalakrishnan",
+  "license": "MIT"
 }
