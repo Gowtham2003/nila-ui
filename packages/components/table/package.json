@@ -1,6 +1,6 @@
 {
   "name": "@nila-ui/table",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "Table component for Nila UI",
   "type": "module",
   "main": "dist/index.js",
@@ -26,17 +26,9 @@
     "clsx": "^2.0.0",
     "tailwind-merge": "^2.0.0"
   },
-  "devDependencies": {
-    "@repo/eslint-config": "workspace:*"
-  },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
-  "private": false,
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gowtham2003/nila-ui.git"
-  },
-  "author": "Gowtham Gobalakrishnan"
+  "private": false
 }

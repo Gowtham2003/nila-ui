@@ -35,10 +35,6 @@
     "pnpm": ">=9.x"
   },
   "packageManager": "pnpm@9.6.0",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/gowtham2003/nila-ui.git"
