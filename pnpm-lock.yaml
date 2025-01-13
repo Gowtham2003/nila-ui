@@ -106,10 +106,6 @@ importers:
       tailwindcss:
         specifier: ^3.4.0
         version: 3.4.17
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../eslint-config
 
   packages/eslint-config:
     devDependencies:
