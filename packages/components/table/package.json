@@ -13,7 +13,7 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "clean": "rimraf dist",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run clean && npm run build"
   },
@@ -25,6 +25,9 @@
   "dependencies": {
     "clsx": "^2.0.0",
     "tailwind-merge": "^2.0.0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

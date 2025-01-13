@@ -91,15 +91,25 @@ importers:
 
   packages/components/table:
     dependencies:
+      clsx:
+        specifier: ^2.0.0
+        version: 2.1.1
       react:
         specifier: ^18.0.0
         version: 18.3.1
       react-dom:
         specifier: ^18.0.0
         version: 18.3.1(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.0.0
+        version: 2.6.0
       tailwindcss:
         specifier: ^3.4.0
         version: 3.4.17
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../eslint-config
 
   packages/eslint-config:
     devDependencies:
