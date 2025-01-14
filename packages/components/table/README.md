@@ -4,20 +4,6 @@ A modern, flexible table component for React with built-in features like sorting
 
 ## Usage
 
-1. Include the library files in your tailwind configuration:
-
-```js
-// tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      colors: {},
-    },
-  },
-  plugins: [require("@nilaui/config")],
-};
-```
-
 ```tsx
 import { Table, Column } from "@nilaui/table";
 
@@ -66,11 +52,3 @@ function App() {
 | sortable | boolean                   | false     | Enable sorting for column   |
 | body     | (rowData: T) => ReactNode | undefined | Custom cell renderer        |
 | style    | CSSProperties             | undefined | Custom column style         |
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-
-MIT
