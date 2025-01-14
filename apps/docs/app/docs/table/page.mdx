@@ -1,0 +1,173 @@
+# Table
+
+## Installation
+
+```bash
+npm install @nila-ui/table
+# or
+yarn add @nila-ui/table
+# or
+pnpm add @nila-ui/table
+```
+
+## Basic Usage
+
+```tsx
+import { Table, Column } from "@nila-ui/table";
+
+type User = {
+  id: string;
+  name: string;
+  age: number;
+  email: string;
+};
+
+const users = [
+  { id: "1", name: "John Doe", age: 30, email: "john@example.com" },
+  { id: "2", name: "Jane Smith", age: 25, email: "jane@example.com" },
+];
+
+export function BasicTable() {
+  return (
+    <Table value={users}>
+      <Column field="name" header="Name" />
+      <Column field="age" header="Age" sortable />
+      <Column field="email" header="Email" />
+    </Table>
+  );
+}
+```
+
+## Props
+
+### Table Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| value | `T[]` | Required | Array of data to display in the table |
+| children | `ReactNode` | Required | Column components |
+| isLoading | `boolean` | `false` | Shows a loading spinner when true |
+| onRowClick | `(row: T) => void` | - | Callback function when a row is clicked |
+| tableStyle | `CSSProperties` | - | Custom styles for the table element |
+| showGridlines | `boolean` | `false` | Shows borders between cells |
+| stripedRows | `boolean` | `false` | Alternates row background colors |
+| hoverable | `boolean` | `false` | Adds hover effect to rows |
+| paginator | `boolean` | `false` | Enables pagination |
+| rows | `number` | `10` | Number of rows per page |
+| rowsPerPageOptions | `number[]` | - | Available options for rows per page |
+| showRowsPerPage | `boolean` | `true` | Shows rows per page selector |
+| showCurrentPageReport | `boolean` | `true` | Shows current page information |
+| onPageChange | `(page: number) => void` | - | Callback when page changes |
+| onRowsPerPageChange | `(rowsPerPage: number) => void` | - | Callback when rows per page changes |
+
+### Column Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| field | `keyof T` | Required | Field name from data object |
+| header | `string` | Required | Column header text |
+| sortable | `boolean` | `false` | Makes column sortable |
+| body | `(rowData: T) => ReactNode` | - | Custom cell content renderer |
+| headerStyle | `CSSProperties` | - | Custom styles for header cell |
+| bodyStyle | `CSSProperties \| ((rowData: T) => CSSProperties)` | - | Custom styles for body cells |
+| className | `string \| ((rowData: T) => string)` | - | Custom CSS class names |
+| style | `CSSProperties` | - | Custom styles for the entire column |
+
+## Examples
+
+### Sortable Columns
+
+```tsx
+<Table value={users}>
+  <Column field="name" header="Name" sortable />
+  <Column field="age" header="Age" sortable />
+  <Column field="email" header="Email" sortable />
+</Table>
+```
+
+### Custom Cell Rendering
+
+```tsx
+<Table value={users}>
+  <Column
+    field="name"
+    header="Name"
+    body={(rowData) => (
+      <div className="flex items-center gap-2">
+        <img
+          src={rowData.avatar}
+          alt={rowData.name}
+          className="w-8 h-8 rounded-full"
+        />
+        <span>{rowData.name}</span>
+      </div>
+    )}
+  />
+  <Column field="age" header="Age" />
+  <Column
+    field="status"
+    header="Status"
+    body={(rowData) => (
+      <span className={`badge ${rowData.status === 'active' ? 'bg-green-500' : 'bg-red-500'}`}>
+        {rowData.status}
+      </span>
+    )}
+  />
+</Table>
+```
+
+### Pagination
+
+```tsx
+<Table
+  value={users}
+  paginator
+  rows={5}
+  rowsPerPageOptions={[5, 10, 20]}
+  showCurrentPageReport
+>
+  <Column field="name" header="Name" />
+  <Column field="age" header="Age" />
+  <Column field="email" header="Email" />
+</Table>
+```
+
+### Styling
+
+```tsx
+<Table
+  value={users}
+  stripedRows
+  hoverable
+  showGridlines
+  tableStyle={{ minWidth: '50rem' }}
+>
+  <Column
+    field="name"
+    header="Name"
+    headerStyle={{ backgroundColor: '#f8f9fa' }}
+    bodyStyle={(rowData) => ({
+      color: rowData.age > 30 ? 'red' : 'inherit'
+    })}
+  />
+  <Column field="age" header="Age" />
+  <Column field="email" header="Email" />
+</Table>
+```
+
+### Row Click Handler
+
+```tsx
+<Table
+  value={users}
+  hoverable
+  onRowClick={(row) => {
+    console.log('Clicked row:', row);
+    // Navigate or show details
+  }}
+>
+  <Column field="name" header="Name" />
+  <Column field="age" header="Age" />
+  <Column field="email" header="Email" />
+</Table>
+```
