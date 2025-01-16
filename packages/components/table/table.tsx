@@ -30,7 +30,7 @@ type ExtractColumnField<T> = {
   [K in keyof T]: T[K] extends string | number ? K : never;
 }[keyof T];
 
-export function Table<T extends { id: string | number }>({
+export function Table<T>({
   value,
   children,
   isLoading = false,
@@ -203,7 +203,7 @@ export function Table<T extends { id: string | number }>({
         <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
           {paginatedData.map((row, index) => (
             <tr
-              key={row.id}
+              key={index}
               onClick={() => onRowClick?.(row)}
               className={rowClasses(index)}
             >
@@ -220,7 +220,7 @@ export function Table<T extends { id: string | number }>({
 
                 return (
                   <td
-                    key={`${row.id}-${String(column.accessor)}`}
+                    key={`${index}-${String(column.accessor)}`}
                     className={cn(
                       cellClasses,
                       "whitespace-nowrap text-neutral-900 dark:text-neutral-100",
