@@ -1,6 +1,6 @@
 {
   "name": "@nila-ui/table",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Table component for Nila UI",
   "type": "module",
   "main": "dist/index.js",
