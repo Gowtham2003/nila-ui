@@ -1,5 +1,11 @@
 # @nila-ui/table
 
+## 0.0.4
+
+### Patch Changes
+
+- c27494b: fix(table): enhance key generation in Table component header
+
 ## 0.0.3
 
 ### Patch Changes
