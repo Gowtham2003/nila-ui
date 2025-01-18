@@ -1,5 +1,11 @@
 # @nila-ui/table
 
+## 0.0.3
+
+### Patch Changes
+
+- fd97f1d: improve key generation in Table component for better uniqueness
+
 ## 0.0.2
 
 ### Patch Changes
