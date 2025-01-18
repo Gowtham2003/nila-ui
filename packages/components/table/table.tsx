@@ -167,9 +167,9 @@ export function Table<T>({
       <table className={tableClasses} style={tableStyle}>
         <thead className="bg-neutral-100 dark:bg-neutral-700 border-b border-neutral-200 dark:border-neutral-600">
           <tr>
-            {columns.map((column) => (
+            {columns.map((column, index) => (
               <th
-                key={String(column.accessor)}
+                key={`${index}-${String(column.accessor ?? `col-${index}`)}`}
                 onClick={() => handleSort(column.accessor, column.sortable)}
                 className={cn(
                   "px-6 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-300 uppercase tracking-wider",
