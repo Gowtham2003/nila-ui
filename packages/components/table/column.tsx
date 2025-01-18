@@ -1,13 +1,20 @@
-export interface ColumnProps<T> {
-  field: keyof T;
+export type ColumnProps<T> = {
   header: string;
   sortable?: boolean;
-  body?: (rowData: T) => React.ReactNode;
   headerStyle?: React.CSSProperties;
   bodyStyle?: React.CSSProperties | ((rowData: T) => React.CSSProperties);
   className?: string | ((rowData: T) => string);
   style?: React.CSSProperties;
-}
+} & (
+  | {
+      field: keyof T;
+      body?: (rowData: T) => React.ReactNode;
+    }
+  | {
+      field?: never;
+      body: (rowData: T) => React.ReactNode;
+    }
+);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function Column<T>(_props: ColumnProps<T>) {

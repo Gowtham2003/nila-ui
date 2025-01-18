@@ -63,15 +63,12 @@ export function Table<T>({
       (child): child is React.ReactElement<ColumnProps<T>> =>
         isValidElement(child) && isColumn(child)
     )
-    .map((column) => {
+    .map((column: React.ReactElement<ColumnProps<T>>) => {
       const field = column.props.field;
-      if (typeof field !== "string") {
-        throw new Error(`Column field must be a string, got ${typeof field}`);
-      }
       return {
         header: column.props.header,
-        accessor: field as ExtractColumnField<T>,
-        sortable: column.props.sortable,
+        accessor: field as ExtractColumnField<T> | undefined,
+        sortable: column.props.sortable && field !== undefined,
         body: column.props.body,
         headerStyle: column.props.headerStyle,
         bodyStyle: column.props.bodyStyle,
@@ -80,8 +77,8 @@ export function Table<T>({
       };
     });
 
-  const handleSort = (accessor: keyof T, sortable?: boolean) => {
-    if (!sortable) return;
+  const handleSort = (accessor: keyof T | undefined, sortable?: boolean) => {
+    if (!sortable || !accessor) return;
 
     setSortConfig((currentSort) => ({
       key: accessor,
@@ -220,7 +217,7 @@ export function Table<T>({
 
                 return (
                   <td
-                    key={`${index}-${String(column.accessor)}`}
+                    key={`${index}-${String(column.accessor ?? index)}`}
                     className={cn(
                       cellClasses,
                       "whitespace-nowrap text-neutral-900 dark:text-neutral-100",
@@ -230,7 +227,9 @@ export function Table<T>({
                   >
                     {column.body
                       ? column.body(row)
-                      : String(row[column.accessor])}
+                      : column.accessor
+                        ? String(row[column.accessor])
+                        : null}
                   </td>
                 );
               })}

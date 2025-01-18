@@ -37,3 +37,7 @@ yarn-error.log*
 .DS_Store
 *.pem
 .cursorrules
+packages/components/table/package-lock.json
+packages/eslint-config/package-lock.json
+packages/typescript-config/package-lock.json
+package-lock.json

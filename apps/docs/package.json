@@ -23,7 +23,8 @@
     "rehype-prism-plus": "^2.0.0",
     "remark-gfm": "^4.0.0",
     "remark-toc": "^9.0.0",
-    "tailwind-merge": "^2.0.0"
+    "tailwind-merge": "^2.0.0",
+    "@nila-ui/table": "workspace:*"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
