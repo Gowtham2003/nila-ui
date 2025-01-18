@@ -204,7 +204,7 @@ export function Table<T>({
               onClick={() => onRowClick?.(row)}
               className={rowClasses(index)}
             >
-              {columns.map((column) => {
+              {columns.map((column, columnIndex) => {
                 const bodyStyle =
                   typeof column.bodyStyle === "function"
                     ? column.bodyStyle(row)
@@ -217,7 +217,7 @@ export function Table<T>({
 
                 return (
                   <td
-                    key={`${index}-${String(column.accessor ?? index)}`}
+                    key={`${index}-${String(column.accessor ?? `col-${columnIndex}`)}`}
                     className={cn(
                       cellClasses,
                       "whitespace-nowrap text-neutral-900 dark:text-neutral-100",
