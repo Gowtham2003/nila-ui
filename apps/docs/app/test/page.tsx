@@ -8,7 +8,10 @@ export default function TestPage() {
     <div>
       <Table value={[{ name: "John", age: 20 }]}>
         <Column header="Name" field="name" />
-        <Column header="Age" body={(row) => <div>{row.age}</div>} />
+        <Column
+          header="Age"
+          body={(row: { name: string; age: number }) => <div>{row.age}</div>}
+        />
       </Table>
     </div>
   );
