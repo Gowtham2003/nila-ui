@@ -4,8 +4,9 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-
-    "./node_modules/@nila-ui/table/dist/**/*.{js}",
+    // Include workspace packages
+    "../../packages/components/table/src/**/*.{js,ts,jsx,tsx}",
+    "../../packages/components/slide-overs/src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {},

@@ -1,4 +1,4 @@
-export { Table } from "./table";
-export { Column } from "./column";
-export type { TableProps } from "./table";
-export type { ColumnProps } from "./column";
+export { Table } from "./src/table";
+export { Column } from "./src/column";
+export type { TableProps } from "./src/table";
+export type { ColumnProps } from "./src/column";
