@@ -41,3 +41,4 @@ packages/components/table/package-lock.json
 packages/eslint-config/package-lock.json
 packages/typescript-config/package-lock.json
 package-lock.json
+.vscode/settings.json

@@ -5,7 +5,7 @@ import type { ColumnProps } from "./column";
 import { LoadingSpinner } from "./loading-spinner";
 import { SortIcon } from "./sort-icon";
 import { TablePaginator } from "./table-paginator";
-import { cn } from "./lib/utils";
+import { cn } from "../lib/utils";
 
 export interface TableProps<T> {
   value: T[];
