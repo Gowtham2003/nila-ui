@@ -1,5 +1,11 @@
 # @nila-ui/table
 
+## 0.0.7
+
+### Patch Changes
+
+- f6b53f7: Added optional table empty skeleton text prop
+
 ## 0.0.6
 
 ### Patch Changes
