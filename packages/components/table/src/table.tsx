@@ -140,6 +140,20 @@ export function Table<T>({
     ]
   );
 
+  const rowClasses = (index: number) =>
+    cn(
+      "transition-colors",
+      stripedRows && index % 2 === 0 && "bg-white dark:bg-neutral-800",
+      stripedRows && index % 2 === 1 && "bg-neutral-100 dark:bg-neutral-700",
+      hoverable && "hover:bg-neutral-200 dark:hover:bg-neutral-600",
+      onRowClick && "cursor-pointer"
+    );
+
+  const cellClasses = cn(
+    "px-6 py-4 text-sm",
+    showGridlines ? "border-neutral-200 dark:border-neutral-700" : "border-0"
+  );
+
   if (value.length === 0) {
     return (
       <div className="w-full overflow-x-auto rounded-lg shadow bg-white dark:bg-neutral-800">
@@ -195,20 +209,6 @@ export function Table<T>({
       </div>
     );
   }
-
-  const rowClasses = (index: number) =>
-    cn(
-      "transition-colors",
-      stripedRows && index % 2 === 0 && "bg-white dark:bg-neutral-800",
-      stripedRows && index % 2 === 1 && "bg-neutral-100 dark:bg-neutral-700",
-      hoverable && "hover:bg-neutral-200 dark:hover:bg-neutral-600",
-      onRowClick && "cursor-pointer"
-    );
-
-  const cellClasses = cn(
-    "px-6 py-4 text-sm",
-    showGridlines ? "border-neutral-200 dark:border-neutral-700" : "border-0"
-  );
 
   return (
     <div className="w-full overflow-x-auto rounded-lg shadow bg-white dark:bg-neutral-800">
