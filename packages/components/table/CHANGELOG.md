@@ -1,5 +1,11 @@
 # @nila-ui/table
 
+## 0.0.5
+
+### Patch Changes
+
+- f1590d9: Added empty state basic skeleton
+
 ## 0.0.4
 
 ### Patch Changes
