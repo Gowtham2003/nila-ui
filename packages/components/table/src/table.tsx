@@ -5,7 +5,7 @@ import type { ColumnProps } from "./column";
 import { LoadingSpinner } from "./loading-spinner";
 import { SortIcon } from "./sort-icon";
 import { TablePaginator } from "./table-paginator";
-import { cn } from "../lib/utils";
+import { cn } from "./lib/utils";
 
 export interface TableProps<T> {
   value: T[];
@@ -132,14 +132,6 @@ export function Table<T>({
     );
   }
 
-  if (value.length === 0) {
-    return (
-      <div className="w-full h-64 flex items-center justify-center text-neutral-500 dark:text-neutral-400">
-        <p>No data available</p>
-      </div>
-    );
-  }
-
   const tableClasses = cn(
     "w-full table-auto",
     showGridlines && [
@@ -147,6 +139,62 @@ export function Table<T>({
       "border-neutral-200 dark:border-neutral-700",
     ]
   );
+
+  if (value.length === 0) {
+    return (
+      <div className="w-full overflow-x-auto rounded-lg shadow bg-white dark:bg-neutral-800">
+        <table className={tableClasses} style={tableStyle}>
+          <thead className="bg-neutral-100 dark:bg-neutral-700 border-b border-neutral-200 dark:border-neutral-600">
+            <tr>
+              {columns.map((column, index) => (
+                <th
+                  key={`${index}-${String(column.accessor ?? `col-${index}`)}`}
+                  className={cn(
+                    "px-6 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-300 uppercase tracking-wider",
+                    cellClasses
+                  )}
+                  style={{ ...column.headerStyle, ...column.style }}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>{column.header}</span>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colSpan={columns.length} className="px-6 py-24 text-center">
+                <div className="flex flex-col items-center justify-center gap-4">
+                  <svg
+                    className="w-16 h-16 text-neutral-300 dark:text-neutral-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                    />
+                  </svg>
+                  <div className="text-center">
+                    <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100">
+                      No data available
+                    </h3>
+                    <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+                      There are no items to display at the moment.
+                    </p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    );
+  }
 
   const rowClasses = (index: number) =>
     cn(
