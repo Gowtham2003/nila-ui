@@ -24,6 +24,11 @@ export interface TableProps<T> {
   showCurrentPageReport?: boolean;
   onPageChange?: (page: number) => void;
   onRowsPerPageChange?: (rowsPerPage: number) => void;
+  // Empty state configuration
+  emptyState?: {
+    title?: string;
+    description?: string;
+  };
 }
 
 type ExtractColumnField<T> = {
@@ -47,6 +52,11 @@ export function Table<T>({
   showCurrentPageReport = true,
   onPageChange,
   onRowsPerPageChange,
+  // Empty state configuration
+  emptyState = {
+    title: "No data available",
+    description: "There are no items to display at the moment.",
+  },
 }: TableProps<T>) {
   const [sortConfig, setSortConfig] = useState<{
     key: keyof T | null;
@@ -195,10 +205,10 @@ export function Table<T>({
                   </svg>
                   <div className="text-center">
                     <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100">
-                      No data available
+                      {emptyState.title}
                     </h3>
                     <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-                      There are no items to display at the moment.
+                      {emptyState.description}
                     </p>
                   </div>
                 </div>
