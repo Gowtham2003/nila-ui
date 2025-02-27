@@ -5,6 +5,7 @@ export type ColumnProps<T> = {
   bodyStyle?: React.CSSProperties | ((rowData: T) => React.CSSProperties);
   className?: string | ((rowData: T) => string);
   style?: React.CSSProperties;
+  onSort?: (value1: T, value2: T, direction: "asc" | "desc") => number;
 } & (
   | {
       field: keyof T;

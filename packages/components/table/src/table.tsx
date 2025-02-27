@@ -84,6 +84,7 @@ export function Table<T>({
         bodyStyle: column.props.bodyStyle,
         className: column.props.className,
         style: column.props.style,
+        onSort: column.props.onSort,
       };
     });
 
@@ -104,6 +105,15 @@ export function Table<T>({
     const sorted = [...value].sort((a, b) => {
       if (!sortConfig.key) return 0;
 
+      // Find the column with the current sort key
+      const column = columns.find((col) => col.accessor === sortConfig.key);
+
+      // Use custom sort function if provided
+      if (column?.onSort) {
+        return column.onSort(a, b, sortConfig.direction);
+      }
+
+      // Default sorting logic
       const aValue = a[sortConfig.key];
       const bValue = b[sortConfig.key];
 
@@ -112,7 +122,7 @@ export function Table<T>({
       return 0;
     });
     return sorted;
-  }, [value, sortConfig]);
+  }, [value, sortConfig, columns]);
 
   // Handle pagination
   const handlePageChange = (page: number) => {
