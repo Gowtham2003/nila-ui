@@ -1,5 +1,11 @@
 # @nila-ui/table
 
+## 0.0.8
+
+### Patch Changes
+
+- 4e588ff: Add OnSort api
+
 ## 0.0.7
 
 ### Patch Changes
