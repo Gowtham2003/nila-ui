@@ -155,36 +155,36 @@ export function Table<T>({
   const tableClasses = cn(
     "w-full table-auto",
     showGridlines && [
-      "[&_td]:border [&_th]:border",
-      "border-neutral-200 dark:border-neutral-700",
+      "[&_td]:border-b [&_th]:border-b",
+      "border-neutral-200 dark:border-neutral-800",
     ]
   );
 
   const rowClasses = (index: number) =>
     cn(
       "transition-colors",
-      stripedRows && index % 2 === 0 && "bg-white dark:bg-neutral-800",
-      stripedRows && index % 2 === 1 && "bg-neutral-100 dark:bg-neutral-700",
-      hoverable && "hover:bg-neutral-200 dark:hover:bg-neutral-600",
+      stripedRows && index % 2 === 0 && "bg-white dark:bg-neutral-950",
+      stripedRows && index % 2 === 1 && "bg-neutral-50 dark:bg-neutral-900",
+      hoverable && "hover:bg-neutral-100 dark:hover:bg-neutral-800",
       onRowClick && "cursor-pointer"
     );
 
   const cellClasses = cn(
-    "px-6 py-4 text-sm",
-    showGridlines ? "border-neutral-200 dark:border-neutral-700" : "border-0"
+    "px-4 py-3 text-sm",
+    showGridlines ? "border-neutral-200 dark:border-neutral-800" : "border-0"
   );
 
   if (value.length === 0) {
     return (
-      <div className="w-full overflow-x-auto rounded-lg shadow bg-white dark:bg-neutral-800">
+      <div className="w-full overflow-x-auto rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
         <table className={tableClasses} style={tableStyle}>
-          <thead className="bg-neutral-100 dark:bg-neutral-700 border-b border-neutral-200 dark:border-neutral-600">
+          <thead className="bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800">
             <tr>
               {columns.map((column, index) => (
                 <th
                   key={`${index}-${String(column.accessor ?? `col-${index}`)}`}
                   className={cn(
-                    "px-6 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-300 uppercase tracking-wider",
+                    "px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider",
                     cellClasses
                   )}
                   style={{ ...column.headerStyle, ...column.style }}
@@ -201,7 +201,7 @@ export function Table<T>({
               <td colSpan={columns.length} className="px-6 py-24 text-center">
                 <div className="flex flex-col items-center justify-center gap-4">
                   <svg
-                    className="w-16 h-16 text-neutral-300 dark:text-neutral-600"
+                    className="w-16 h-16 text-neutral-200 dark:text-neutral-800"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -214,7 +214,7 @@ export function Table<T>({
                     />
                   </svg>
                   <div className="text-center">
-                    <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100">
+                    <h3 className="text-base font-medium text-neutral-700 dark:text-neutral-300">
                       {emptyState.title}
                     </h3>
                     <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
@@ -231,26 +231,26 @@ export function Table<T>({
   }
 
   return (
-    <div className="w-full overflow-x-auto rounded-lg shadow bg-white dark:bg-neutral-800">
+    <div className="w-full overflow-x-auto rounded-md border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
       <table className={tableClasses} style={tableStyle}>
-        <thead className="bg-neutral-100 dark:bg-neutral-700 border-b border-neutral-200 dark:border-neutral-600">
+        <thead className="bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800">
           <tr>
             {columns.map((column, index) => (
               <th
                 key={`${index}-${String(column.accessor ?? `col-${index}`)}`}
                 onClick={() => handleSort(column.accessor, column.sortable)}
                 className={cn(
-                  "px-6 py-3 text-left text-xs font-medium text-neutral-600 dark:text-neutral-300 uppercase tracking-wider",
+                  "px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider",
                   column.sortable &&
-                    "cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-600",
+                    "cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-900",
                   cellClasses
                 )}
                 style={{ ...column.headerStyle, ...column.style }}
               >
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center">
                   <span>{column.header}</span>
                   {column.sortable && (
-                    <span className="ml-2">
+                    <span className="ml-1.5 flex items-center">
                       <SortIcon
                         direction={
                           sortConfig.key === column.accessor
@@ -265,7 +265,7 @@ export function Table<T>({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
+        <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
           {paginatedData.map((row, index) => (
             <tr
               key={index}
@@ -288,7 +288,7 @@ export function Table<T>({
                     key={`${index}-${String(column.accessor ?? `col-${columnIndex}`)}`}
                     className={cn(
                       cellClasses,
-                      "whitespace-nowrap text-neutral-900 dark:text-neutral-100",
+                      "whitespace-nowrap text-neutral-700 dark:text-neutral-300",
                       className
                     )}
                     style={{ ...bodyStyle, ...column.style }}

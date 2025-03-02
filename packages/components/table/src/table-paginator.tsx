@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { cn } from "./lib/utils";
 
 interface TablePaginatorProps {
@@ -6,7 +7,7 @@ interface TablePaginatorProps {
   rowsPerPage: number;
   rowsPerPageOptions?: number[];
   onPageChange: (page: number) => void;
-  onRowsPerPageChange?: (rowsPerPage: number) => void;
+  onRowsPerPageChange: (rowsPerPage: number) => void;
   showRowsPerPage?: boolean;
   showCurrentPageReport?: boolean;
 }
@@ -15,198 +16,270 @@ export function TablePaginator({
   currentPage,
   totalRows,
   rowsPerPage,
-  rowsPerPageOptions,
+  rowsPerPageOptions = [5, 10, 20, 50],
   onPageChange,
   onRowsPerPageChange,
   showRowsPerPage = true,
   showCurrentPageReport = true,
 }: TablePaginatorProps) {
-  const totalPages = Math.ceil(totalRows / rowsPerPage);
+  const [inputPage, setInputPage] = useState(currentPage.toString());
+
+  useEffect(() => {
+    setInputPage(currentPage.toString());
+  }, [currentPage]);
+
+  const totalPages = Math.max(1, Math.ceil(totalRows / rowsPerPage));
+  const isFirstPage = currentPage === 1;
+  const isLastPage = currentPage === totalPages;
+
   const startRow = (currentPage - 1) * rowsPerPage + 1;
   const endRow = Math.min(startRow + rowsPerPage - 1, totalRows);
 
-  const buttonClasses = cn(
-    "relative inline-flex items-center justify-center h-9 min-w-[2.25rem] px-3 text-sm font-medium transition-all duration-200",
-    "border border-transparent",
-    "focus:outline-none",
-    "disabled:opacity-50 disabled:cursor-not-allowed"
-  );
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      onPageChange(page);
+    }
+  };
 
-  const activeButtonClasses = cn(
-    buttonClasses,
-    "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400",
-    "border-blue-200 dark:border-blue-800",
-    "shadow-sm shadow-blue-100 dark:shadow-blue-900/20",
-    "hover:bg-blue-100 dark:hover:bg-blue-900/40"
-  );
+  const handleRowsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = parseInt(e.target.value, 10);
+    onRowsPerPageChange(value);
+  };
 
-  const inactiveButtonClasses = cn(
-    buttonClasses,
-    "text-neutral-600 dark:text-neutral-300",
-    "hover:bg-neutral-50 dark:hover:bg-neutral-800",
-    "hover:text-neutral-900 dark:hover:text-neutral-100"
-  );
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputPage(e.target.value);
+  };
 
-  const navigationButtonClasses = cn(
-    buttonClasses,
-    "text-neutral-600 dark:text-neutral-300",
-    "hover:bg-neutral-50 dark:hover:bg-neutral-800",
-    "hover:text-neutral-900 dark:hover:text-neutral-100",
-    "border border-neutral-200 dark:border-neutral-700",
-    "disabled:hover:bg-transparent dark:disabled:hover:bg-transparent"
-  );
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      const page = parseInt(inputPage, 10);
+      if (!isNaN(page) && page >= 1 && page <= totalPages) {
+        handlePageChange(page);
+      }
+    }
+  };
 
-  const selectClasses = cn(
-    "block h-9 pl-3 pr-8 text-sm transition-colors duration-200",
-    "rounded-md border-neutral-200 dark:border-neutral-700",
-    "bg-white dark:bg-neutral-800",
-    "text-neutral-900 dark:text-neutral-100",
-    "focus:border-blue-500 dark:focus:border-blue-400",
-    "focus:ring-blue-500 dark:focus:ring-blue-400",
-    "hover:border-neutral-300 dark:hover:border-neutral-600"
-  );
+  const handleInputBlur = () => {
+    const page = parseInt(inputPage, 10);
+    if (!isNaN(page) && page >= 1 && page <= totalPages) {
+      handlePageChange(page);
+    } else {
+      setInputPage(currentPage.toString());
+    }
+  };
 
-  // Responsive pagination logic
-  const getVisiblePages = () => {
-    if (totalPages <= 5) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
+  // Generate page navigation buttons
+  const getPageNumbers = () => {
+    const maxVisiblePages = 5;
+    const pageNumbers = [];
+
+    if (totalPages <= maxVisiblePages) {
+      // Show all pages if total pages is less than or equal to max visible pages
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      // Always include first page
+      pageNumbers.push(1);
+
+      // Calculate start and end of middle section
+      let startPage = Math.max(2, currentPage - 1);
+      let endPage = Math.min(totalPages - 1, currentPage + 1);
+
+      // Adjust to show 3 pages in the middle
+      if (startPage === 2) {
+        endPage = Math.min(totalPages - 1, startPage + 2);
+      } else if (endPage === totalPages - 1) {
+        startPage = Math.max(2, endPage - 2);
+      }
+
+      // Add ellipsis if needed
+      if (startPage > 2) {
+        pageNumbers.push("ellipsis-start");
+      }
+
+      // Add middle pages
+      for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+      }
+
+      // Add ellipsis if needed
+      if (endPage < totalPages - 1) {
+        pageNumbers.push("ellipsis-end");
+      }
+
+      // Always include last page
+      pageNumbers.push(totalPages);
     }
 
-    if (currentPage <= 3) {
-      return [1, 2, 3, 4, "...", totalPages];
+    return pageNumbers;
+  };
+
+  const pageNumbers = getPageNumbers();
+
+  const renderPageNumber = (pageNumber: number | string, idx: number) => {
+    if (pageNumber === "ellipsis-start" || pageNumber === "ellipsis-end") {
+      return (
+        <span
+          key={`ellipsis-${idx}`}
+          className="px-2 py-1 text-neutral-500 dark:text-neutral-400"
+        >
+          ...
+        </span>
+      );
     }
 
-    if (currentPage >= totalPages - 2) {
-      return [
-        1,
-        "...",
-        totalPages - 3,
-        totalPages - 2,
-        totalPages - 1,
-        totalPages,
-      ];
-    }
+    const isActive = pageNumber === currentPage;
 
-    return [
-      1,
-      "...",
-      currentPage - 1,
-      currentPage,
-      currentPage + 1,
-      "...",
-      totalPages,
-    ];
+    return (
+      <button
+        key={pageNumber}
+        onClick={() => handlePageChange(pageNumber as number)}
+        className={cn(
+          "relative inline-flex items-center justify-center min-w-[32px] h-8 px-2 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600 focus:ring-offset-2",
+          isActive
+            ? "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 z-10"
+            : "text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+        )}
+        aria-current={isActive ? "page" : undefined}
+      >
+        {pageNumber}
+      </button>
+    );
   };
 
   return (
-    <div className="flex flex-col gap-4 px-4 py-3 border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 sm:px-6 sm:flex-row sm:items-center sm:justify-between">
-      {/* Top section - Rows per page and info */}
-      <div className="flex flex-wrap items-center gap-4">
-        {showRowsPerPage && rowsPerPageOptions && onRowsPerPageChange && (
-          <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-neutral-600 dark:text-neutral-300 whitespace-nowrap">
-              Rows per page
-            </label>
-            <div className="relative">
-              <select
-                value={rowsPerPage}
-                onChange={(e) => onRowsPerPageChange(Number(e.target.value))}
-                className={selectClasses}
-              >
-                {rowsPerPageOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        )}
+    <div className="flex flex-col sm:flex-row justify-between items-center py-3 px-3 border-t border-neutral-200 dark:border-neutral-800 text-sm">
+      <div className="flex items-center mb-3 sm:mb-0 text-neutral-500 dark:text-neutral-400">
         {showCurrentPageReport && (
-          <div className="flex items-center gap-1.5 text-sm text-neutral-600 dark:text-neutral-300">
-            <span className="font-medium">{startRow}</span>
-            <span>-</span>
-            <span className="font-medium">{endRow}</span>
-            <span>of</span>
-            <span className="font-medium">{totalRows}</span>
+          <span className="mr-4">
+            Showing {startRow}-{endRow} of {totalRows}
+          </span>
+        )}
+
+        {showRowsPerPage && (
+          <div className="flex items-center">
+            <span className="mr-2">Rows per page:</span>
+            <select
+              value={rowsPerPage}
+              onChange={handleRowsPerPageChange}
+              className="bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border border-neutral-300 dark:border-neutral-700 rounded-md py-1 px-2 text-xs focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600"
+            >
+              {rowsPerPageOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
           </div>
         )}
       </div>
 
-      {/* Bottom section - Pagination controls */}
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center space-x-1">
         <button
-          onClick={() => onPageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className={cn(navigationButtonClasses, "rounded-l-lg")}
-          aria-label="Previous page"
+          onClick={() => handlePageChange(1)}
+          disabled={isFirstPage}
+          className={cn(
+            "relative inline-flex items-center justify-center min-w-[32px] h-8 px-2 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600",
+            isFirstPage
+              ? "text-neutral-400 dark:text-neutral-600 cursor-not-allowed"
+              : "text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          )}
+          aria-label="First page"
         >
-          <span className="sr-only sm:not-sr-only">Previous</span>
           <svg
-            className="h-5 w-5 sm:hidden"
+            className="w-5 h-5"
             fill="none"
-            stroke="currentColor"
             viewBox="0 0 24 24"
+            stroke="currentColor"
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}
+              strokeWidth={1.5}
+              d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+            />
+          </svg>
+        </button>
+
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={isFirstPage}
+          className={cn(
+            "relative inline-flex items-center justify-center min-w-[32px] h-8 px-2 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600",
+            isFirstPage
+              ? "text-neutral-400 dark:text-neutral-600 cursor-not-allowed"
+              : "text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          )}
+          aria-label="Previous page"
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
               d="M15 19l-7-7 7-7"
             />
           </svg>
         </button>
 
-        <div className="hidden sm:flex sm:items-center sm:gap-1">
-          {getVisiblePages().map((page, index) =>
-            typeof page === "number" ? (
-              <button
-                key={index}
-                onClick={() => onPageChange(page)}
-                className={
-                  page === currentPage
-                    ? activeButtonClasses
-                    : inactiveButtonClasses
-                }
-              >
-                {page}
-              </button>
-            ) : (
-              <span
-                key={index}
-                className="w-9 text-center text-sm text-neutral-500 dark:text-neutral-400"
-              >
-                {page}
-              </span>
-            )
-          )}
-        </div>
-
-        {/* Mobile current page indicator */}
-        <div className="flex items-center gap-1.5 sm:hidden">
-          <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-            Page {currentPage} of {totalPages}
-          </span>
-        </div>
+        {pageNumbers.map((pageNumber, idx) =>
+          renderPageNumber(pageNumber as number | string, idx)
+        )}
 
         <button
-          onClick={() => onPageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className={cn(navigationButtonClasses, "rounded-r-lg")}
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={isLastPage}
+          className={cn(
+            "relative inline-flex items-center justify-center min-w-[32px] h-8 px-2 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600",
+            isLastPage
+              ? "text-neutral-400 dark:text-neutral-600 cursor-not-allowed"
+              : "text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          )}
           aria-label="Next page"
         >
-          <span className="sr-only sm:not-sr-only">Next</span>
           <svg
-            className="h-5 w-5 sm:hidden"
+            className="w-5 h-5"
             fill="none"
-            stroke="currentColor"
             viewBox="0 0 24 24"
+            stroke="currentColor"
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}
+              strokeWidth={1.5}
               d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+
+        <button
+          onClick={() => handlePageChange(totalPages)}
+          disabled={isLastPage}
+          className={cn(
+            "relative inline-flex items-center justify-center min-w-[32px] h-8 px-2 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600",
+            isLastPage
+              ? "text-neutral-400 dark:text-neutral-600 cursor-not-allowed"
+              : "text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          )}
+          aria-label="Last page"
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M13 5l7 7-7 7M5 5l7 7-7 7"
             />
           </svg>
         </button>
