@@ -1,5 +1,11 @@
 # @nila-ui/table
 
+## 0.0.9
+
+### Patch Changes
+
+- 02c6983: feat: improve Table component with enhanced pagination and styling
+
 ## 0.0.8
 
 ### Patch Changes
